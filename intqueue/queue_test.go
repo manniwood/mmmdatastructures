@@ -1,41 +1,41 @@
-package queue
+package intqueue
 
 import "testing"
 
 func TestCreate(t *testing.T) {
-	q := NewInt()
-	if q.Head != -1 {
-		t.Error("Expected Head to be -1, got ", q.Head)
+	q := New()
+	if q.head != -1 {
+		t.Error("Expected Head to be -1, got ", q.head)
 	}
-	if q.Tail != -1 {
-		t.Error("Expected Tail to be -1, got ", q.Tail)
+	if q.tail != -1 {
+		t.Error("Expected Tail to be -1, got ", q.tail)
 	}
 }
 
 func TestEnqueue(t *testing.T) {
-	q := NewInt()
+	q := New()
 	q.Enqueue(5)
-	if q.Tail != -1 {
-		t.Error("Expected Tail to be -1, got ", q.Tail)
+	if q.tail != -1 {
+		t.Error("Expected Tail to be -1, got ", q.tail)
 	}
-	if q.Head != 0 {
-		t.Error("Expected Tail to be 0, got ", q.Tail)
+	if q.head != 0 {
+		t.Error("Expected Tail to be 0, got ", q.tail)
 	}
 }
 
 func TestFill(t *testing.T) {
-	q := NewInt()
+	q := New()
 	for i := 1; i <= 32; i++ {
 		q.Enqueue(i)
 	}
 	q.Enqueue(33)
-	if q.Capacity != 64 {
+	if q.capacity != 64 {
 		t.Error("Expected capacity to double")
 	}
 }
 
 func TestDrain(t *testing.T) {
-	q := NewInt()
+	q := New()
 	for i := 1; i <= 32; i++ {
 		q.Enqueue(i)
 	}
