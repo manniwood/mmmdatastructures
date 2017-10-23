@@ -16,6 +16,9 @@
 //
 // Therefore, when asking for a new instance of the
 // queue, pick a capacity that you think won't need to grow.
+//
+// When the queue does need to grow, it always uses a capacity
+// that is twice the current capacity. This is not tunable.
 package intqueue
 
 import "github.com/pkg/errors"
@@ -29,18 +32,27 @@ type IntQueue struct {
 	length   int
 }
 
-// Creates a new empty queue for ints and returns a pointer to it.
+// DefauiltCapacity is the default capacity of the IntQueue
+// when constructed using New() instead of NewWithCapacity().
+const DefaultCapacity = 32
+
+// New returns a new empty queue for ints of the default capacity.
 func New() (q *IntQueue) {
+	return NewWithCapacity(DefaultCapacity)
+}
+
+// NewWithCapacity returns a new empty queue for ints with the requested capacity.
+func NewWithCapacity(capacity int) (q *IntQueue) {
 	q = new(IntQueue)
-	q.data = make([]int, 32, 32)
+	q.data = make([]int, capacity, capacity)
 	q.head = -1
 	q.tail = -1
-	q.capacity = 32
+	q.capacity = capacity
 	q.length = 0
 	return q
 }
 
-// Enqueues an int. Returns an error if the size
+// Enqueue enqueues an int. Returns an error if the size
 // of the queue cannot be grown any more to accommodate
 // the added int.
 func (q *IntQueue) Enqueue(i int) error {
@@ -81,7 +93,8 @@ func (q *IntQueue) resize(new_capacity int) {
 	q.data = new_data
 }
 
-// Enqueues an int. Returns an error of the queue is empty.
+// Dequeue dequeues an int. It returns the dequeued int
+// or an error of the queue is empty.
 func (q *IntQueue) Dequeue() (int, error) {
 	if q.length-1 < 0 {
 		return 0, errors.New("Queue empty")
