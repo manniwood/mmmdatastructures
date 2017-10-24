@@ -1,16 +1,16 @@
-// Package intqueue implements a queue for ints.
+// Package stringqueue implements a queue for strings.
 //
-// The internal representation is a slice of ints
+// The internal representation is a slice of strings
 // that gets used as a circular buffer.
 // This is instead of a more traditional approach
 // that would use a linked list of nodes.
 // The assumption is that contiguous slabs of RAM
 // will generally provide more performance over pointers
-// to nodes scattered about the heap.
+// to nodes potentially scattered about the heap.
 //
 // There is a downside: whereas enqueueing to a
 // linked list is always O(1), enqueueing here will
-// be O(1) except for when the internal slice of ints
+// be O(1) except for when the internal slice of strings
 // has to be resized; then, enqueueing will be O(n)
 // where n is the size of the queue before being resized.
 //
@@ -19,13 +19,13 @@
 //
 // When the queue does need to grow, it always uses a capacity
 // that is twice the current capacity. This is not tunable.
-package intqueue
+package stringqueue
 
 import "github.com/pkg/errors"
 
 // IntQueue holds the data and state of the queue.
 type IntQueue struct {
-	data     []int
+	data     []string
 	head     int
 	tail     int
 	capacity int
@@ -36,15 +36,15 @@ type IntQueue struct {
 // when constructed using New() instead of NewWithCapacity().
 const DefaultCapacity = 32
 
-// New returns a new empty queue for ints of the default capacity.
+// New returns a new empty queue for strings of the default capacity.
 func New() (q *IntQueue) {
 	return NewWithCapacity(DefaultCapacity)
 }
 
-// NewWithCapacity returns a new empty queue for ints with the requested capacity.
+// NewWithCapacity returns a new empty queue for strings with the requested capacity.
 func NewWithCapacity(capacity int) (q *IntQueue) {
 	q = new(IntQueue)
-	q.data = make([]int, capacity, capacity)
+	q.data = make([]string, capacity, capacity)
 	q.head = -1
 	q.tail = -1
 	q.capacity = capacity
@@ -52,10 +52,10 @@ func NewWithCapacity(capacity int) (q *IntQueue) {
 	return q
 }
 
-// Enqueue enqueues an int. Returns an error if the size
+// Enqueue enqueues a string. Returns an error if the size
 // of the queue cannot be grown any more to accommodate
-// the added int.
-func (q *IntQueue) Enqueue(i int) error {
+// the added string.
+func (q *IntQueue) Enqueue(i string) error {
 	if q.length+1 > q.capacity {
 		new_capacity := q.capacity * 2
 		// if new_cap became negative, we have exceeded
@@ -81,9 +81,9 @@ func (q *IntQueue) Enqueue(i int) error {
 // every element in the correct order already, so we
 // just leverage that.
 func (q *IntQueue) resize(new_capacity int) {
-	new_data := make([]int, new_capacity, new_capacity)
+	new_data := make([]string, new_capacity, new_capacity)
 	var err error
-	var i int
+	var i string
 	for err = nil; err == nil; i, err = q.Dequeue() {
 		new_data = append(new_data, i)
 	}
@@ -93,11 +93,11 @@ func (q *IntQueue) resize(new_capacity int) {
 	q.data = new_data
 }
 
-// Dequeue dequeues an int. It returns the dequeued int
+// Dequeue dequeues a string. It returns the dequeued string
 // or an error of the queue is empty.
-func (q *IntQueue) Dequeue() (int, error) {
+func (q *IntQueue) Dequeue() (string, error) {
 	if q.length-1 < 0 {
-		return 0, errors.New("Queue empty")
+		return "", errors.New("Queue empty")
 	}
 	q.length--
 	q.tail++
