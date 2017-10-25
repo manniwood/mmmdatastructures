@@ -1,5 +1,9 @@
 // Package stringqueue implements a queue for strings.
 //
+// It is an express design decision to hard-code
+// this queue just for the int type rather than for
+// the empty interface.
+//
 // The internal representation is a slice of strings
 // that gets used as a circular buffer.
 // This is instead of a more traditional approach
@@ -15,10 +19,19 @@
 // where n is the size of the queue before being resized.
 //
 // Therefore, when asking for a new instance of the
-// queue, pick a capacity that you think won't need to grow.
+// queue, use NewWithCapacity() to pick a capacity that you
+// think won't need to grow.
 //
 // When the queue does need to grow, it always uses a capacity
-// that is twice the current capacity. This is not tunable.
+// that is twice the current capacity. Enqueue() will do this
+// doubling for you automatically.
+//
+// However, if you would like to grow the backing slice
+// yourself, to have control over 1) when the size is increased,
+// and 2) how much larger the backing slice grows, you can use
+// Resize() directly. If your code needs to ask the current
+// capacity and length of the queue, Capacity() and Length()
+// will provide those numbers.
 package stringqueue
 
 import "github.com/pkg/errors"
@@ -57,13 +70,16 @@ func NewWithCapacity(capacity int) (q *IntQueue) {
 // the added string.
 func (q *IntQueue) Enqueue(i string) error {
 	if q.length+1 > q.capacity {
-		new_capacity := q.capacity * 2
+		newCapacity := q.capacity * 2
 		// if new_cap became negative, we have exceeded
 		// our capacity by doing one bit-shift too far
-		if new_capacity < 0 {
+		if newCapacity < 0 {
 			return errors.New("Capacity exceeded")
 		}
-		q.resize(new_capacity)
+		// NOTE: Purposefully not concerning ourselves
+		// with the error returned from Resize here, because
+		// we know our newCapacity is larger than q.capacity.
+		q.Resize(newCapacity)
 	}
 	q.length++
 	q.head++
@@ -74,23 +90,51 @@ func (q *IntQueue) Enqueue(i string) error {
 	return nil
 }
 
-// Head can be earlier in array than tail, so
-// we can't just copy; we could overwrite the tail.
-// Instead, we may as well copy the queue in order
-// into the new array. The Dequeue() method gives us
-// every element in the correct order already, so we
-// just leverage that.
-func (q *IntQueue) resize(new_capacity int) {
-	new_data := make([]string, new_capacity, new_capacity)
+// Length tells you the current length
+// of the queue. It also tells you how many
+// slots are being used in the slice that
+// backs the queue.
+func (q *IntQueue) Length() int {
+	return q.length
+}
+
+// Capacity tells you the current capacity
+// of the slice that backs the queue.
+func (q *IntQueue) Capacity() int {
+	return q.capacity
+}
+
+// Resize resizes the underlying slice that backs
+// the queue. The Enqueue method calls this automatically
+// when the backing slice is full, but feel free to use
+// this method preemptively if your calling code has a
+// good time to do this resizing. Also, the Enqueue method
+// uses a new backing slice that is twice the size of the
+// old one; but if you call Resize yourself, you can pick
+// whatever new size you want.
+func (q *IntQueue) Resize(newCapacity int) error {
+	if newCapacity <= q.capacity {
+		return errors.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, q.capacity)
+	}
+	new_data := make([]string, newCapacity, newCapacity)
 	var err error
 	var i string
+	// Because we are using the slice as a ring buffer,
+	// head can be earlier in array than tail, so
+	// it would be strange to just copy the old (possibly
+	// partially wrapped) slice into the new slice.
+	// Instead, we may as well copy the queue in order
+	// into the new slice. The Dequeue() method gives us
+	// every element in the correct order already, so we
+	// just leverage that.
 	for err = nil; err == nil; i, err = q.Dequeue() {
 		new_data = append(new_data, i)
 	}
 	q.head = q.length - 1
 	q.tail = 0
-	q.capacity = new_capacity
+	q.capacity = newCapacity
 	q.data = new_data
+	return nil
 }
 
 // Dequeue dequeues a string. It returns the dequeued string
