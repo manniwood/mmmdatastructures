@@ -71,7 +71,7 @@ func NewWithCapacity(capacity int) (q *Queue) {
 func (q *Queue) Enqueue(i int) error {
 	if q.length+1 > q.capacity {
 		newCapacity := q.capacity * 2
-		// if new_cap became negative, we have exceeded
+		// if newCapacity became negative, we have exceeded
 		// our capacity by doing one bit-shift too far
 		if newCapacity < 0 {
 			return errors.New("Capacity exceeded")
@@ -116,7 +116,7 @@ func (q *Queue) Resize(newCapacity int) error {
 	if newCapacity <= q.capacity {
 		return errors.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, q.capacity)
 	}
-	new_data := make([]int, newCapacity, newCapacity)
+	newData := make([]int, newCapacity, newCapacity)
 	var err error
 	var i int
 	// Because we are using the slice as a ring buffer,
@@ -128,17 +128,17 @@ func (q *Queue) Resize(newCapacity int) error {
 	// every element in the correct order already, so we
 	// just leverage that.
 	for err = nil; err == nil; i, err = q.Dequeue() {
-		new_data = append(new_data, i)
+		newData = append(newData, i)
 	}
 	q.head = q.length - 1
 	q.tail = 0
 	q.capacity = newCapacity
-	q.data = new_data
+	q.data = newData
 	return nil
 }
 
 // Dequeue dequeues an int. It returns the dequeued int
-// or an error of the queue is empty.
+// or an error if the queue is empty.
 func (q *Queue) Dequeue() (int, error) {
 	if q.length-1 < 0 {
 		return 0, errors.New("Queue empty")
