@@ -90,15 +90,15 @@ func (q *Queue) Enqueue(i int) error {
 	return nil
 }
 
-// Length tells you the current length
-// of the queue. It also tells you how many
-// slots are being used in the slice that
+// Length returns the current length
+// of the queue. This is the same as the number of
+// slots used in the slice that
 // backs the queue.
 func (q *Queue) Length() int {
 	return q.length
 }
 
-// Capacity tells you the current capacity
+// Capacity returns the current capacity
 // of the slice that backs the queue.
 func (q *Queue) Capacity() int {
 	return q.capacity

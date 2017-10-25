@@ -90,15 +90,15 @@ func (q *Queue) Enqueue(i string) error {
 	return nil
 }
 
-// Length tells you the current length
-// of the queue. It also tells you how many
-// slots are being used in the slice that
+// Length returns the current length
+// of the queue. This is the same as the number of
+// slots used in the slice that
 // backs the queue.
 func (q *Queue) Length() int {
 	return q.length
 }
 
-// Capacity tells you the current capacity
+// Capacity returns the current capacity
 // of the slice that backs the queue.
 func (q *Queue) Capacity() int {
 	return q.capacity
@@ -118,7 +118,7 @@ func (q *Queue) Resize(newCapacity int) error {
 	}
 	new_data := make([]string, newCapacity, newCapacity)
 	var err error
-	var i string
+	var s string
 	// Because we are using the slice as a ring buffer,
 	// head can be earlier in array than tail, so
 	// it would be strange to just copy the old (possibly
@@ -127,8 +127,8 @@ func (q *Queue) Resize(newCapacity int) error {
 	// into the new slice. The Dequeue() method gives us
 	// every element in the correct order already, so we
 	// just leverage that.
-	for err = nil; err == nil; i, err = q.Dequeue() {
-		new_data = append(new_data, i)
+	for err = nil; err == nil; s, err = q.Dequeue() {
+		new_data = append(new_data, s)
 	}
 	q.head = q.length - 1
 	q.tail = 0
