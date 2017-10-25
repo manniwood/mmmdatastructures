@@ -1,4 +1,4 @@
-// Package stringqueue implements a queue for strings.
+// Package mmmstring implements a queue for strings.
 //
 // It is an express design decision to hard-code
 // this queue just for the int type rather than for
@@ -32,7 +32,7 @@
 // Resize() directly. If your code needs to ask the current
 // capacity and length of the queue, Capacity() and Length()
 // will provide those numbers.
-package stringqueue
+package mmmstring
 
 import "github.com/pkg/errors"
 

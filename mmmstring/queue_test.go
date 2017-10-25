@@ -1,4 +1,4 @@
-package stringqueue
+package mmmstring
 
 import "testing"
 

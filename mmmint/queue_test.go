@@ -1,4 +1,4 @@
-package intqueue
+package mmmint
 
 import "testing"
 
