@@ -1,10 +1,10 @@
-// Package mmmint implements a queue for ints.
+// Package queue implements a queue for strings.
 //
 // It is an express design decision to hard-code
 // this queue just for the int type rather than for
 // the empty interface.
 //
-// The internal representation is a slice of ints
+// The internal representation is a slice of strings
 // that gets used as a circular buffer.
 // This is instead of a more traditional approach
 // that would use a linked list of nodes.
@@ -14,7 +14,7 @@
 //
 // There is a downside: whereas enqueueing to a
 // linked list is always O(1), enqueueing here will
-// be O(1) except for when the internal slice of ints
+// be O(1) except for when the internal slice of strings
 // has to be resized; then, enqueueing will be O(n)
 // where n is the size of the queue before being resized.
 //
@@ -32,13 +32,13 @@
 // Resize() directly. If your code needs to ask the current
 // capacity and length of the queue, Capacity() and Length()
 // will provide those numbers.
-package mmmint
+package queue
 
 import "github.com/pkg/errors"
 
 // Queue holds the data and state of the queue.
 type Queue struct {
-	data     []int
+	data     []string
 	head     int
 	tail     int
 	capacity int
@@ -49,15 +49,15 @@ type Queue struct {
 // when constructed using New() instead of NewWithCapacity().
 const DefaultCapacity = 32
 
-// New returns a new empty queue for ints of the default capacity.
+// New returns a new empty queue for strings of the default capacity.
 func New() (q *Queue) {
 	return NewWithCapacity(DefaultCapacity)
 }
 
-// NewWithCapacity returns a new empty queue for ints with the requested capacity.
+// NewWithCapacity returns a new empty queue for strings with the requested capacity.
 func NewWithCapacity(capacity int) (q *Queue) {
 	q = new(Queue)
-	q.data = make([]int, capacity, capacity)
+	q.data = make([]string, capacity, capacity)
 	q.head = -1
 	q.tail = -1
 	q.capacity = capacity
@@ -65,10 +65,10 @@ func NewWithCapacity(capacity int) (q *Queue) {
 	return q
 }
 
-// Enqueue enqueues an int. Returns an error if the size
+// Enqueue enqueues a string. Returns an error if the size
 // of the queue cannot be grown any more to accommodate
-// the added int.
-func (q *Queue) Enqueue(i int) error {
+// the added string.
+func (q *Queue) Enqueue(i string) error {
 	if q.length+1 > q.capacity {
 		newCapacity := q.capacity * 2
 		// if new_cap became negative, we have exceeded
@@ -116,9 +116,9 @@ func (q *Queue) Resize(newCapacity int) error {
 	if newCapacity <= q.capacity {
 		return errors.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, q.capacity)
 	}
-	new_data := make([]int, newCapacity, newCapacity)
+	new_data := make([]string, newCapacity, newCapacity)
 	var err error
-	var i int
+	var i string
 	// Because we are using the slice as a ring buffer,
 	// head can be earlier in array than tail, so
 	// it would be strange to just copy the old (possibly
@@ -137,11 +137,11 @@ func (q *Queue) Resize(newCapacity int) error {
 	return nil
 }
 
-// Dequeue dequeues an int. It returns the dequeued int
+// Dequeue dequeues a string. It returns the dequeued string
 // or an error of the queue is empty.
-func (q *Queue) Dequeue() (int, error) {
+func (q *Queue) Dequeue() (string, error) {
 	if q.length-1 < 0 {
-		return 0, errors.New("Queue empty")
+		return "", errors.New("Queue empty")
 	}
 	q.length--
 	q.tail++
