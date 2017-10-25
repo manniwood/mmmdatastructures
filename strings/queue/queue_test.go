@@ -1,4 +1,4 @@
-package intqueue
+package queue
 
 import "testing"
 
@@ -14,7 +14,7 @@ func TestCreate(t *testing.T) {
 
 func TestEnqueue(t *testing.T) {
 	q := New()
-	q.Enqueue(5)
+	q.Enqueue("5")
 	if q.tail != -1 {
 		t.Error("Expected Tail to be -1, got ", q.tail)
 	}
@@ -26,9 +26,9 @@ func TestEnqueue(t *testing.T) {
 func TestFill(t *testing.T) {
 	q := New()
 	for i := 1; i <= 32; i++ {
-		q.Enqueue(i)
+		q.Enqueue(string(i))
 	}
-	q.Enqueue(33)
+	q.Enqueue("33")
 	if q.capacity != 64 {
 		t.Error("Expected capacity to double")
 	}
@@ -37,13 +37,13 @@ func TestFill(t *testing.T) {
 func TestDrain(t *testing.T) {
 	q := New()
 	for i := 1; i <= 32; i++ {
-		q.Enqueue(i)
+		q.Enqueue(string(i))
 	}
-	var i int
+	var i string
 	var err error
 	for j := 0; j < 32; j++ {
 		i, err = q.Dequeue()
-		if i != j+1 {
+		if i != string(j+1) {
 			t.Error("Expected i to be ", j, ", got ", i)
 		}
 	}
@@ -52,9 +52,9 @@ func TestDrain(t *testing.T) {
 		t.Error("Expected err to be present")
 	}
 	for j := 1; j < 35; j++ {
-		q.Enqueue(j)
+		q.Enqueue(string(j))
 		i, err = q.Dequeue()
-		if i != j {
+		if i != string(j) {
 			t.Error("Expected i to be ", j, ", got ", i)
 		}
 	}
