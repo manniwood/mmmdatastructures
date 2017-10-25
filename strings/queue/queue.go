@@ -1,7 +1,7 @@
 // Package queue implements a queue for strings.
 //
 // It is an express design decision to hard-code
-// this queue just for the int type rather than for
+// this queue just for the string type rather than for
 // the empty interface.
 //
 // The internal representation is a slice of strings
