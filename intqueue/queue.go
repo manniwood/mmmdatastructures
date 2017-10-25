@@ -36,8 +36,8 @@ package intqueue
 
 import "github.com/pkg/errors"
 
-// IntQueue holds the data and state of the queue.
-type IntQueue struct {
+// Queue holds the data and state of the queue.
+type Queue struct {
 	data     []int
 	head     int
 	tail     int
@@ -45,18 +45,18 @@ type IntQueue struct {
 	length   int
 }
 
-// DefauiltCapacity is the default capacity of the IntQueue
+// DefaultCapacity is the default capacity of the queue
 // when constructed using New() instead of NewWithCapacity().
 const DefaultCapacity = 32
 
 // New returns a new empty queue for ints of the default capacity.
-func New() (q *IntQueue) {
+func New() (q *Queue) {
 	return NewWithCapacity(DefaultCapacity)
 }
 
 // NewWithCapacity returns a new empty queue for ints with the requested capacity.
-func NewWithCapacity(capacity int) (q *IntQueue) {
-	q = new(IntQueue)
+func NewWithCapacity(capacity int) (q *Queue) {
+	q = new(Queue)
 	q.data = make([]int, capacity, capacity)
 	q.head = -1
 	q.tail = -1
@@ -68,7 +68,7 @@ func NewWithCapacity(capacity int) (q *IntQueue) {
 // Enqueue enqueues an int. Returns an error if the size
 // of the queue cannot be grown any more to accommodate
 // the added int.
-func (q *IntQueue) Enqueue(i int) error {
+func (q *Queue) Enqueue(i int) error {
 	if q.length+1 > q.capacity {
 		newCapacity := q.capacity * 2
 		// if new_cap became negative, we have exceeded
@@ -94,13 +94,13 @@ func (q *IntQueue) Enqueue(i int) error {
 // of the queue. It also tells you how many
 // slots are being used in the slice that
 // backs the queue.
-func (q *IntQueue) Length() int {
+func (q *Queue) Length() int {
 	return q.length
 }
 
 // Capacity tells you the current capacity
 // of the slice that backs the queue.
-func (q *IntQueue) Capacity() int {
+func (q *Queue) Capacity() int {
 	return q.capacity
 }
 
@@ -112,7 +112,7 @@ func (q *IntQueue) Capacity() int {
 // uses a new backing slice that is twice the size of the
 // old one; but if you call Resize yourself, you can pick
 // whatever new size you want.
-func (q *IntQueue) Resize(newCapacity int) error {
+func (q *Queue) Resize(newCapacity int) error {
 	if newCapacity <= q.capacity {
 		return errors.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, q.capacity)
 	}
@@ -139,7 +139,7 @@ func (q *IntQueue) Resize(newCapacity int) error {
 
 // Dequeue dequeues an int. It returns the dequeued int
 // or an error of the queue is empty.
-func (q *IntQueue) Dequeue() (int, error) {
+func (q *Queue) Dequeue() (int, error) {
 	if q.length-1 < 0 {
 		return 0, errors.New("Queue empty")
 	}
