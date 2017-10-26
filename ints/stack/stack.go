@@ -35,7 +35,7 @@ func NewWithCapacity(capacity int) (s *Stack) {
 	return s
 }
 
-// Push pushes a int onto the stack. Returns an error if the size
+// Push pushes an int onto the stack. Returns an error if the size
 // of the stack cannot be grown any more to accommodate
 // the added int.
 func (s *Stack) Push(i int) error {
