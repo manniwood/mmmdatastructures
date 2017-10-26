@@ -1,7 +1,7 @@
-// Package maxheap implements a binary max heap for ints.
+// Package maxheap implements a binary max heap for strings.
 //
 // It is an express design decision to hard-code
-// this max heap just for the int type rather than for
+// this max heap just for the string type rather than for
 // the empty interface.
 //
 package maxheap
@@ -13,7 +13,7 @@ import (
 
 // MaxHeap holds the data and state of the max heap.
 type MaxHeap struct {
-	data     []int
+	data     []string
 	capacity int
 	size     int
 }
@@ -22,12 +22,12 @@ type MaxHeap struct {
 // when constructed using New() instead of NewWithCapacity().
 const DefaultCapacity = 32
 
-// New returns a new empty max heap for ints of the default capacity.
+// New returns a new empty max heap for strings of the default capacity.
 func New() (h *MaxHeap) {
 	return NewWithCapacity(DefaultCapacity)
 }
 
-// NewWithCapacity returns a new empty max heap for ints with the requested capacity
+// NewWithCapacity returns a new empty max heap for strings with the requested capacity
 // rounded up to the next power of two.
 func NewWithCapacity(requested int) (h *MaxHeap) {
 	power := 1
@@ -40,16 +40,16 @@ func NewWithCapacity(requested int) (h *MaxHeap) {
 		}
 	}
 	h = new(MaxHeap)
-	h.data = make([]int, power, power)
+	h.data = make([]string, power, power)
 	h.capacity = power
 	h.size = 0
 	return h
 }
 
-// Insert inserts an int onto the max heap. Returns an error if the size
+// Insert inserts a string onto the max heap. Returns an error if the size
 // of the max heap cannot be grown any more to accommodate
-// the added int.
-func (h *MaxHeap) Insert(i int) error {
+// the added string.
+func (h *MaxHeap) Insert(str string) error {
 	if h.size+1 > h.capacity {
 		newCapacity := h.capacity * 2
 		// if newCapacity became negative, we have exceeded
@@ -68,7 +68,7 @@ func (h *MaxHeap) Insert(i int) error {
 	// up, swapping it with its parent, until it is in the
 	// correct position in the max heap.
 	h.size++
-	h.data[h.size] = i
+	h.data[h.size] = str
 	child := h.size
 	for parent := child / 2; parent > 0; parent = child / 2 {
 		if h.data[child] > h.data[parent] {
@@ -102,7 +102,7 @@ func (h *MaxHeap) resize(newCapacity int) error {
 	if newCapacity <= h.capacity {
 		return errors.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, h.capacity)
 	}
-	newData := make([]int, newCapacity, newCapacity)
+	newData := make([]string, newCapacity, newCapacity)
 	for i := 0; i < len(h.data); i++ {
 		newData[i] = h.data[i]
 	}
@@ -113,18 +113,18 @@ func (h *MaxHeap) resize(newCapacity int) error {
 
 // Peek returns the largest value from the top of the
 // heap, without removing it.
-func (h *MaxHeap) Peek() (int, error) {
+func (h *MaxHeap) Peek() (string, error) {
 	if h.size == 0 {
-		return 0, errors.New("Heap empty")
+		return "", errors.New("Heap empty")
 	}
 	return h.data[1], nil
 }
 
 // Delete returns the largest value from the top of the
 // heap, deleting it.
-func (h *MaxHeap) Delete() (int, error) {
+func (h *MaxHeap) Delete() (string, error) {
 	if h.size == 0 {
-		return 0, errors.New("Heap empty")
+		return "", errors.New("Heap empty")
 	}
 	max := h.data[1]
 	h.data[1] = h.data[h.size]
