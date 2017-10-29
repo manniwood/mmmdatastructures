@@ -74,3 +74,34 @@ func TestDelete(t *testing.T) {
 		t.Error("Supposed to return error when deleting from empty max heap")
 	}
 }
+
+func compareSlices(t *testing.T, want []string, got []string) {
+	if len(want) != len(got) {
+		t.Error("Expected size to be %v, got %v", len(want), len(got))
+	}
+	for i, x := range want {
+		if x != got[i] {
+			t.Errorf("Expected %vth, element to be %v, got %v", i, x, got[i])
+		}
+	}
+}
+
+func TestSort(t *testing.T) {
+	var tests = []struct {
+		input []string
+		want  []string
+	}{
+		{[]string{"0", "606", "243", "737", "864", "937", "663", "114", "633", "390", "143", "725", "679"},
+			[]string{"0", "114", "143", "243", "390", "606", "633", "663", "679", "725", "737", "864", "937"}},
+		{[]string{"0", "2"},
+			[]string{"0", "2"}},
+		{[]string{"0"},
+			[]string{"0"}},
+		{nil,
+			nil},
+	}
+	for _, test := range tests {
+		Sort(test.input)
+		compareSlices(t, test.want, test.input)
+	}
+}
