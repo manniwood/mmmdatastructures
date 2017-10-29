@@ -38,10 +38,10 @@ func TestInsert(t *testing.T) {
 func checkBackingSlice(t *testing.T, a []int, b []int, sz int) {
 	expectedSize := len(a) - 1
 	if sz != expectedSize {
-		t.Error("Expected size to be %v, got %v", expectedSize, sz)
+		t.Errorf("Expected size to be %v, got %v", expectedSize, sz)
 	}
 	for i, x := range a {
-		if a[i] != b[i] {
+		if x != b[i] {
 			t.Errorf("Expected %vth, element to be %v, got %v", i, x, b[i])
 		}
 	}
@@ -72,5 +72,36 @@ func TestDelete(t *testing.T) {
 	_, err := h.Delete()
 	if err == nil {
 		t.Error("Supposed to return error when deleting from empty max heap")
+	}
+}
+
+func compareSlices(t *testing.T, want []int, got []int) {
+	if len(want) != len(got) {
+		t.Error("Expected size to be %v, got %v", len(want), len(got))
+	}
+	for i, x := range want {
+		if x != got[i] {
+			t.Errorf("Expected %vth, element to be %v, got %v", i, x, got[i])
+		}
+	}
+}
+
+func TestSort(t *testing.T) {
+	var tests = []struct {
+		input []int
+		want  []int
+	}{
+		{[]int{0, 606, 243, 737, 864, 937, 663, 114, 633, 390, 143, 725, 679},
+			[]int{0, 114, 143, 243, 390, 606, 633, 663, 679, 725, 737, 864, 937}},
+		{[]int{0, 2},
+			[]int{0, 2}},
+		{[]int{0},
+			[]int{0}},
+		{nil,
+			nil},
+	}
+	for _, test := range tests {
+		Sort(test.input)
+		compareSlices(t, test.want, test.input)
 	}
 }

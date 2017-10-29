@@ -127,24 +127,55 @@ func (h *MaxHeap) Delete() (int, error) {
 		return 0, errors.New("Heap empty")
 	}
 	max := h.data[1]
+	// Take the last item in the heap and make it the
+	// new root, even though this is almost certainly
+	// not the largest element...
 	h.data[1] = h.data[h.size]
 	h.size--
 
 	parent := 1
-	for parent*2 <= h.size {
-		// make child the index of the larger of the parent's two children
+	// ...and "sink" it down to its correct level in the heap.
+	sink(h.data, parent, h.size)
+
+	return max, nil
+}
+
+func sink(data []int, parent int, size int) {
+	for parent*2 <= size {
+		// Make child the index of the larger of the parent's two children.
+		// But, only check the right child when one exists, otherwise we
+		// are reading past the end of the slice.
 		child := parent * 2
-		if h.data[child+1] > h.data[child] {
+		if child+1 <= size && data[child+1] > data[child] {
 			child++
 		}
 		// swap the child with the parent if the child is larger
-		if h.data[parent] < h.data[child] {
-			h.data[child], h.data[parent] = h.data[parent], h.data[child]
+		if data[parent] < data[child] {
+			data[child], data[parent] = data[parent], data[child]
 		} else {
 			break
 		}
 		parent = child
 	}
+}
 
-	return max, nil
+// Sort performs an in-place heap sort on the provided slice of int
+func Sort(data []int) {
+	if data == nil || len(data) <= 2 {
+		return
+	}
+	size := len(data) - 1
+	// Turn into a maxheap
+	for i := size / 2; i >= 1; i-- {
+		sink(data, i, size)
+	}
+	// Move max val to the end of the array and then re-heapify all of the array
+	// except for the max at the end. Then move new max val to second-last slot
+	// of the array and re-heapify. The move the new max val to the third-last
+	// slot of the array...
+	for size > 1 {
+		data[1], data[size] = data[size], data[1]
+		size--
+		sink(data, 1, size)
+	}
 }
