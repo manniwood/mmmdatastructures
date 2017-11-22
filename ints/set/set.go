@@ -18,7 +18,7 @@ func (s Set) Put(k int) {
 	s[k] = struct{}{}
 }
 
-func (s Set) Del(k int) {
+func (s Set) Delete(k int) {
 	delete(s, k)
 }
 

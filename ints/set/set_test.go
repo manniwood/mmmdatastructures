@@ -16,7 +16,7 @@ func Test(t *testing.T) {
 		}
 	}
 	for i := 4; i <= 6; i++ {
-		s.Del(i)
+		s.Delete(i)
 	}
 	for i := 4; i <= 6; i++ {
 		if s.Has(i) {

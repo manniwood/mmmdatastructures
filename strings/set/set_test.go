@@ -20,7 +20,7 @@ func Test(t *testing.T) {
 	}
 	for i := 4; i <= 6; i++ {
 		k := strconv.Itoa(i)
-		s.Del(k)
+		s.Delete(k)
 	}
 	for i := 4; i <= 6; i++ {
 		k := strconv.Itoa(i)
