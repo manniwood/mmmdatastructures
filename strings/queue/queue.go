@@ -68,7 +68,7 @@ func NewWithCapacity(capacity int) (q *Queue) {
 // Enqueue enqueues a string. Returns an error if the size
 // of the queue cannot be grown any more to accommodate
 // the added string.
-func (q *Queue) Enqueue(i string) error {
+func (q *Queue) Enqueue(s string) error {
 	if q.length+1 > q.capacity {
 		newCapacity := q.capacity * 2
 		// if newCapacity became negative, we have exceeded
@@ -86,7 +86,20 @@ func (q *Queue) Enqueue(i string) error {
 	if q.head == q.capacity {
 		q.head = 0
 	}
-	q.data[q.head] = i
+	q.data[q.head] = s
+	return nil
+}
+
+// EnqueueSlice enqueues a slice of strings. Returns an error
+// if the size of the queue cannot be grown any more to accommodate
+// the added strings.
+func (q *Queue) EnqueueSlice(sl []string) error {
+	for _, s := range sl {
+		err := q.Enqueue(s)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -96,6 +109,12 @@ func (q *Queue) Enqueue(i string) error {
 // backs the queue.
 func (q *Queue) Length() int {
 	return q.length
+}
+
+// Empty returns true if the queue is empty,
+// false otherwise.
+func (q *Queue) Empty() bool {
+	return q.length == 0
 }
 
 // Capacity returns the current capacity

@@ -90,12 +90,31 @@ func (q *Queue) Enqueue(i int) error {
 	return nil
 }
 
+// EnqueueSlice enqueues a slice of ints. Returns an error
+// if the size of the queue cannot be grown any more to accommodate
+// the added ints.
+func (q *Queue) EnqueueSlice(sl []int) error {
+	for _, i := range sl {
+		err := q.Enqueue(i)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // Length returns the current length
 // of the queue. This is the same as the number of
 // slots used in the slice that
 // backs the queue.
 func (q *Queue) Length() int {
 	return q.length
+}
+
+// Empty returns true if the queue is empty,
+// false otherwise.
+func (q *Queue) Empty() bool {
+	return q.length == 0
 }
 
 // Capacity returns the current capacity

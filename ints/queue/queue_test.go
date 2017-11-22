@@ -1,6 +1,8 @@
 package queue
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestCreate(t *testing.T) {
 	q := New()
@@ -47,6 +49,12 @@ func TestDrain(t *testing.T) {
 			t.Error("Expected i to be ", j, ", got ", i)
 		}
 	}
+	if q.Length() != 0 {
+		t.Error("Expected queue length to be 0")
+	}
+	if !q.Empty() {
+		t.Error("Expected queue to be empty")
+	}
 	i, err = q.Dequeue()
 	if err == nil {
 		t.Error("Expected err to be present")
@@ -56,6 +64,23 @@ func TestDrain(t *testing.T) {
 		i, err = q.Dequeue()
 		if i != j {
 			t.Error("Expected i to be ", j, ", got ", i)
+		}
+	}
+}
+
+func TestEnqueueSlice(t *testing.T) {
+	q := New()
+	q.EnqueueSlice([]int{1, 2, 3})
+	if q.Length() != 3 {
+		t.Error("Expected queue length to be 3")
+	}
+	for j := 1; j <= 3; j++ {
+		i, err := q.Dequeue()
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+		if i != j {
+			t.Errorf("Expected i to be >>%v<<, got >>%v<<", j, i)
 		}
 	}
 }
