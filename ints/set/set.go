@@ -1,5 +1,5 @@
-// Package set implements a set for strings.
-// It's just syntactic sugar around map[string]struct{}
+// Package set implements a set for ints.
+// It's just syntactic sugar around map[int]struct{}
 package set
 
 type Set map[int]struct{}
