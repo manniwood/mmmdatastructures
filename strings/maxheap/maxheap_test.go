@@ -38,7 +38,7 @@ func TestInsert(t *testing.T) {
 func checkBackingSlice(t *testing.T, a []string, b []string, sz int) {
 	expectedSize := len(a) - 1
 	if sz != expectedSize {
-		t.Error("Expected size to be %v, got %v", expectedSize, sz)
+		t.Errorf("Expected size to be %v, got %v", expectedSize, sz)
 	}
 	for i, x := range a {
 		if a[i] != b[i] {
@@ -77,7 +77,7 @@ func TestDelete(t *testing.T) {
 
 func compareSlices(t *testing.T, want []string, got []string) {
 	if len(want) != len(got) {
-		t.Error("Expected size to be %v, got %v", len(want), len(got))
+		t.Errorf("Expected size to be %v, got %v", len(want), len(got))
 	}
 	for i, x := range want {
 		if x != got[i] {

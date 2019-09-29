@@ -77,7 +77,7 @@ func TestDelete(t *testing.T) {
 
 func compareSlices(t *testing.T, want []int, got []int) {
 	if len(want) != len(got) {
-		t.Error("Expected size to be %v, got %v", len(want), len(got))
+		t.Errorf("Expected size to be %v, got %v", len(want), len(got))
 	}
 	for i, x := range want {
 		if x != got[i] {
