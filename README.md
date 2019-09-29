@@ -1,4 +1,5 @@
 [![](https://godoc.org/github.com/manniwood/mmmdatastructures?status.svg)](https://godoc.org/github.com/manniwood/mmmdatastructures)
+[![Build Status](https://travis-ci.org/manniwood/mmmdatastructures.svg)](https://travis-ci.org/manniwood/mmmdatastructures)
 
 # Mmm... data structures
 
