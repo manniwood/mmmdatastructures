@@ -7,9 +7,14 @@
 package maxheap
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/manniwood/mmmdatastructures"
-	"github.com/pkg/errors"
 )
+
+var HeapCapacityExceeded = errors.New("Heap Capacity Exceeded")
+var HeapEmpty = errors.New("Heap Empty")
 
 // MaxHeap holds the data and state of the max heap.
 type MaxHeap struct {
@@ -55,7 +60,7 @@ func (h *MaxHeap) Insert(i int) error {
 		// if newCapacity became negative, we have exceeded
 		// our capacity by doing one bit-shift too far
 		if newCapacity < 0 {
-			return errors.New("Capacity exceeded")
+			return HeapCapacityExceeded
 		}
 		// NOTE: Purposefully not concerning ourselves
 		// with the error returned from Resize here, because
@@ -100,7 +105,7 @@ func (h *MaxHeap) Capacity() int {
 // capacity.
 func (h *MaxHeap) resize(newCapacity int) error {
 	if newCapacity <= h.capacity {
-		return errors.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, h.capacity)
+		return fmt.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, h.capacity)
 	}
 	newData := make([]int, newCapacity, newCapacity)
 	for i := 0; i < len(h.data); i++ {
@@ -115,7 +120,7 @@ func (h *MaxHeap) resize(newCapacity int) error {
 // heap, without removing it.
 func (h *MaxHeap) Peek() (int, error) {
 	if h.size == 0 {
-		return 0, errors.New("Heap empty")
+		return 0, HeapEmpty
 	}
 	return h.data[1], nil
 }
@@ -124,7 +129,7 @@ func (h *MaxHeap) Peek() (int, error) {
 // heap, deleting it.
 func (h *MaxHeap) Delete() (int, error) {
 	if h.size == 0 {
-		return 0, errors.New("Heap empty")
+		return 0, HeapEmpty
 	}
 	max := h.data[1]
 	// Take the last item in the heap and make it the

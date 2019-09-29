@@ -6,7 +6,13 @@
 //
 package stack
 
-import "github.com/pkg/errors"
+import (
+	"errors"
+	"fmt"
+)
+
+var StackCapacityExceeded = errors.New("Stack Capacity Exceeded")
+var StackEmpty = errors.New("Stack Empty")
 
 // Stack holds the data and state of the stack.
 type Stack struct {
@@ -44,7 +50,7 @@ func (s *Stack) Push(i string) error {
 		// if newCapacity became negative, we have exceeded
 		// our capacity by doing one bit-shift too far
 		if newCapacity < 0 {
-			return errors.New("Capacity exceeded")
+			return StackCapacityExceeded
 		}
 		// NOTE: Purposefully not concerning ourselves
 		// with the error returned from Resize here, because
@@ -81,7 +87,7 @@ func (s *Stack) Capacity() int {
 // whatever new size you want.
 func (s *Stack) Resize(newCapacity int) error {
 	if newCapacity <= s.capacity {
-		return errors.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, s.capacity)
+		return fmt.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, s.capacity)
 	}
 	newData := make([]string, newCapacity, newCapacity)
 	for i := 0; i < len(s.data); i++ {
@@ -96,7 +102,7 @@ func (s *Stack) Resize(newCapacity int) error {
 // or an error of the stack is empty.
 func (s *Stack) Pop() (string, error) {
 	if s.size-1 < 0 {
-		return "", errors.New("Stack empty")
+		return "", StackEmpty
 	}
 	str := s.data[s.top]
 	s.size--
@@ -109,7 +115,7 @@ func (s *Stack) Pop() (string, error) {
 // If the stack is empty, an error is returned.
 func (s *Stack) Peek() (string, error) {
 	if s.size-1 < 0 {
-		return "", errors.New("Stack empty")
+		return "", StackEmpty
 	}
 	return s.data[s.top], nil
 }

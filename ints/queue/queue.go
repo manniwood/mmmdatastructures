@@ -34,7 +34,13 @@
 // will provide those numbers.
 package queue
 
-import "github.com/pkg/errors"
+import (
+	"errors"
+	"fmt"
+)
+
+var QueueCapacityExceeded = errors.New("Queue Capacity Exceeded")
+var QueueEmpty = errors.New("Queue Empty")
 
 // Queue holds the data and state of the queue.
 type Queue struct {
@@ -74,7 +80,7 @@ func (q *Queue) Enqueue(i int) error {
 		// if newCapacity became negative, we have exceeded
 		// our capacity by doing one bit-shift too far
 		if newCapacity < 0 {
-			return errors.New("Capacity exceeded")
+			return QueueCapacityExceeded
 		}
 		// NOTE: Purposefully not concerning ourselves
 		// with the error returned from Resize here, because
@@ -133,7 +139,7 @@ func (q *Queue) Capacity() int {
 // whatever new size you want.
 func (q *Queue) Resize(newCapacity int) error {
 	if newCapacity <= q.capacity {
-		return errors.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, q.capacity)
+		return fmt.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, q.capacity)
 	}
 	newData := make([]int, newCapacity, newCapacity)
 	var err error
@@ -160,7 +166,7 @@ func (q *Queue) Resize(newCapacity int) error {
 // or an error if the queue is empty.
 func (q *Queue) Dequeue() (int, error) {
 	if q.length-1 < 0 {
-		return 0, errors.New("Queue empty")
+		return 0, QueueEmpty
 	}
 	q.length--
 	q.tail++
