@@ -10,10 +10,3 @@ instead, make the data structures use concrete types
 like int and string. So far, this approach has not bothered
 me too much.
 
-godoc.org automagically parses the godocs for these data
-structures, so these links will be handy:
-
-[string data structure docs](https://godoc.org/github.com/manniwood/mmmdatastructures/strings)
-
-[int data structure docs](https://godoc.org/github.com/manniwood/mmmdatastructures/ints)
-
