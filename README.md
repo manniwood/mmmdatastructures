@@ -1,3 +1,5 @@
+[![](https://godoc.org/github.com/manniwood/mmmdatastructures?status.svg)](https://godoc.org/github.com/manniwood/mmmdatastructures)
+
 # Mmm... data structures
 
 Here are a few data structures I created for Go while
