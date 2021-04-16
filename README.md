@@ -1,5 +1,3 @@
-[![](https://godoc.org/github.com/manniwood/mmmdatastructures?status.svg)](https://godoc.org/github.com/manniwood/mmmdatastructures)
-[![Build Status](https://travis-ci.org/manniwood/mmmdatastructures.svg)](https://travis-ci.org/manniwood/mmmdatastructures)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Mmm... data structures
