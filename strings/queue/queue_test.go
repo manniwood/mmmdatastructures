@@ -1,6 +1,7 @@
 package queue
 
 import (
+	"fmt"
 	"strconv"
 	"testing"
 )
@@ -29,7 +30,7 @@ func TestEnqueue(t *testing.T) {
 func TestFill(t *testing.T) {
 	q := New()
 	for i := 1; i <= 32; i++ {
-		q.Enqueue(string(i))
+		q.Enqueue(fmt.Sprint(i))
 	}
 	q.Enqueue("33")
 	if q.capacity != 64 {
@@ -40,13 +41,13 @@ func TestFill(t *testing.T) {
 func TestDrain(t *testing.T) {
 	q := New()
 	for i := 1; i <= 32; i++ {
-		q.Enqueue(string(i))
+		q.Enqueue(fmt.Sprint(i))
 	}
 	var i string
 	var err error
 	for j := 0; j < 32; j++ {
 		i, err = q.Dequeue()
-		if i != string(j+1) {
+		if i != fmt.Sprint(j+1) {
 			t.Error("Expected i to be ", j, ", got ", i)
 		}
 	}
@@ -61,9 +62,9 @@ func TestDrain(t *testing.T) {
 		t.Error("Expected err to be present")
 	}
 	for j := 1; j < 35; j++ {
-		q.Enqueue(string(j))
+		q.Enqueue(fmt.Sprint(j))
 		i, err = q.Dequeue()
-		if i != string(j) {
+		if i != fmt.Sprint(j) {
 			t.Error("Expected i to be ", j, ", got ", i)
 		}
 	}

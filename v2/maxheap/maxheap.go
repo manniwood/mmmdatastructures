@@ -23,12 +23,12 @@ type MaxHeap[T constraints.Ordered] struct {
 	size     int
 }
 
-// New returns a new empty max heap for ints of the default capacity.
+// New returns a new empty max heap of the default capacity.
 func New[T constraints.Ordered]() (h *MaxHeap[T]) {
 	return NewWithCapacity[T](DefaultCapacity)
 }
 
-// NewWithCapacity returns a new empty max heap for ints with the requested capacity
+// NewWithCapacity returns a new empty max heap with the requested capacity
 // rounded up to the next power of two.
 func NewWithCapacity[T constraints.Ordered](requested int) (h *MaxHeap[T]) {
 	power := 1
@@ -47,10 +47,10 @@ func NewWithCapacity[T constraints.Ordered](requested int) (h *MaxHeap[T]) {
 	}
 }
 
-// Insert inserts an item onto the max heap. Returns an error if the size
+// Insert inserts an item onto the max heap. It returns an error if the size
 // of the max heap cannot be grown any more to accommodate
 // the added item.
-func (h *MaxHeap[T]) Insert(i T) error {
+func (h *MaxHeap[T]) Insert(elem T) error {
 	if h.size+1 > h.capacity {
 		newCapacity := h.capacity * 2
 		// if newCapacity became negative, we have exceeded
@@ -69,7 +69,7 @@ func (h *MaxHeap[T]) Insert(i T) error {
 	// up, swapping it with its parent, until it is in the
 	// correct position in the max heap.
 	h.size++
-	h.data[h.size] = i
+	h.data[h.size] = elem
 	child := h.size
 	for parent := child / 2; parent > 0; parent = child / 2 {
 		if h.data[child] > h.data[parent] {
@@ -96,7 +96,7 @@ func (h *MaxHeap[T]) Capacity() int {
 
 // resize resizes the underlying slice that backs
 // the max heap. It is made private, because we
-// want to enforce resize only being called with
+// want to enforce resize() only being called with
 // a capacity that is twice the size of the previous
 // capacity.
 func (h *MaxHeap[T]) resize(newCapacity int) error {
@@ -162,7 +162,7 @@ func sink[T constraints.Ordered](data []T, parent int, size int) {
 	}
 }
 
-// Sort performs an in-place heap sort on the provided slice of int
+// Sort performs an in-place heap sort on the provided slice.
 func Sort[T constraints.Ordered](data []T) {
 	if data == nil || len(data) <= 2 {
 		return
@@ -174,7 +174,7 @@ func Sort[T constraints.Ordered](data []T) {
 	}
 	// Move max val to the end of the array and then re-heapify all of the array
 	// except for the max at the end. Then move new max val to second-last slot
-	// of the array and re-heapify. The move the new max val to the third-last
+	// of the array and re-heapify. Then move the new max val to the third-last
 	// slot of the array...
 	for size > 1 {
 		data[1], data[size] = data[size], data[1]

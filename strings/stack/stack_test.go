@@ -1,6 +1,9 @@
 package stack
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestCreate(t *testing.T) {
 	s := New()
@@ -35,7 +38,7 @@ func TestPush(t *testing.T) {
 func TestFill(t *testing.T) {
 	s := New()
 	for i := 1; i <= 32; i++ {
-		s.Push(string(i))
+		s.Push(fmt.Sprint(i))
 	}
 	s.Push("33")
 	if s.capacity != 64 {
@@ -46,13 +49,13 @@ func TestFill(t *testing.T) {
 func TestDrain(t *testing.T) {
 	s := New()
 	for i := 1; i <= 32; i++ {
-		s.Push(string(i))
+		s.Push(fmt.Sprint(i))
 	}
 	var str string
 	var err error
 	for i := 32; i > 0; i-- {
 		str, err = s.Pop()
-		if str != string(i) {
+		if str != fmt.Sprint(i) {
 			t.Error("Expected str to be ", i, ", got ", str)
 		}
 	}
@@ -61,9 +64,9 @@ func TestDrain(t *testing.T) {
 		t.Error("Expected err to be present")
 	}
 	for i := 1; i < 35; i++ {
-		s.Push(string(i))
+		s.Push(fmt.Sprint(i))
 		str, err = s.Pop()
-		if str != string(i) {
+		if str != fmt.Sprint(i) {
 			t.Error("Expected str to be ", i, ", got ", str)
 		}
 	}

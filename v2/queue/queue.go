@@ -1,6 +1,6 @@
 // Package queue implements a queue.
 //
-// The internal representation is a slice of T
+// The internal representation is a slice
 // that gets used as a circular buffer.
 // This is instead of a more traditional approach
 // that would use a linked list of nodes.
@@ -10,7 +10,7 @@
 //
 // There is a downside: whereas enqueueing to a
 // linked list is always O(1), enqueueing here will
-// be O(1) except for when the internal slice of ints
+// be O(1) except for when the internal slice
 // has to be resized; then, enqueueing will be O(n)
 // where n is the size of the queue before being resized.
 //
@@ -52,12 +52,12 @@ type Queue[T constraints.Ordered] struct {
 	length   int
 }
 
-// New returns a new empty queue for ints of the default capacity.
+// New returns a new empty queue of the default capacity.
 func New[T constraints.Ordered]() (q *Queue[T]) {
 	return NewWithCapacity[T](DefaultCapacity)
 }
 
-// NewWithCapacity returns a new empty queue for ints with the requested capacity.
+// NewWithCapacity returns a new empty queue with the requested capacity.
 func NewWithCapacity[T constraints.Ordered](capacity int) (q *Queue[T]) {
 	return &Queue[T]{
 		data: make([]T, capacity, capacity),
@@ -68,10 +68,10 @@ func NewWithCapacity[T constraints.Ordered](capacity int) (q *Queue[T]) {
 	}
 }
 
-// Enqueue enqueues an int. Returns an error if the size
+// Enqueue enqueues an element. Returns an error if the size
 // of the queue cannot be grown any more to accommodate
-// the added int.
-func (q *Queue[T]) Enqueue(i T) error {
+// the added element.
+func (q *Queue[T]) Enqueue(elem T) error {
 	if q.length+1 > q.capacity {
 		newCapacity := q.capacity * 2
 		// if newCapacity became negative, we have exceeded
@@ -89,16 +89,16 @@ func (q *Queue[T]) Enqueue(i T) error {
 	if q.head == q.capacity {
 		q.head = 0
 	}
-	q.data[q.head] = i
+	q.data[q.head] = elem
 	return nil
 }
 
-// EnqueueSlice enqueues a slice of ints. Returns an error
+// EnqueueSlice enqueues a slice of elements. Returns an error
 // if the size of the queue cannot be grown any more to accommodate
-// the added ints.
-func (q *Queue[T]) EnqueueSlice(sl []T) error {
-	for _, i := range sl {
-		err := q.Enqueue(i)
+// the added elements.
+func (q *Queue[T]) EnqueueSlice(elements []T) error {
+	for _, elem := range elements {
+		err := q.Enqueue(elem)
 		if err != nil {
 			return err
 		}
@@ -140,7 +140,7 @@ func (q *Queue[T]) Resize(newCapacity int) error {
 	}
 	newData := make([]T, newCapacity, newCapacity)
 	var err error
-	var i T
+	var elem T
 	// Because we are using the slice as a ring buffer,
 	// head can be earlier in array than tail, so
 	// it would be strange to just copy the old (possibly
@@ -149,8 +149,8 @@ func (q *Queue[T]) Resize(newCapacity int) error {
 	// into the new slice. The Dequeue() method gives us
 	// every element in the correct order already, so we
 	// just leverage that.
-	for err = nil; err == nil; i, err = q.Dequeue() {
-		newData = append(newData, i)
+	for err = nil; err == nil; elem, err = q.Dequeue() {
+		newData = append(newData, elem)
 	}
 	q.head = q.length - 1
 	q.tail = 0

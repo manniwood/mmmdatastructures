@@ -22,12 +22,12 @@ type Stack[T constraints.Ordered] struct {
 	size     int
 }
 
-// New returns a new empty stack for ints of the default capacity.
+// New returns a new empty stack of the default capacity.
 func New[T constraints.Ordered]() (s *Stack[T]) {
 	return NewWithCapacity[T](DefaultCapacity)
 }
 
-// NewWithCapacity returns a new empty stack for ints with the requested capacity.
+// NewWithCapacity returns a new empty stack with the requested capacity.
 func NewWithCapacity[T constraints.Ordered](capacity int) (s *Stack[T]) {
 	return &Stack[T]{
 		data: make([]T, capacity, capacity),
@@ -37,25 +37,25 @@ func NewWithCapacity[T constraints.Ordered](capacity int) (s *Stack[T]) {
 	}
 }
 
-// Push pushes an int onto the stack. Returns an error if the size
+// Push pushes an element onto the stack. It returns an error if the size
 // of the stack cannot be grown any more to accommodate
-// the added int.
-func (s *Stack[T]) Push(i T) error {
+// the added element.
+func (s *Stack[T]) Push(elem T) error {
 	if s.size+1 > s.capacity {
 		newCapacity := s.capacity * 2
-		// if newCapacity became negative, we have exceeded
-		// our capacity by doing one bit-shift too far
+		// If newCapacity became negative, we have exceeded
+		// our capacity.
 		if newCapacity < 0 {
 			return StackCapacityExceeded
 		}
-		// NOTE: Purposefully not concerning ourselves
+		// NOTE: We are purposefully not concerning ourselves
 		// with the error returned from Resize here, because
 		// we know our newCapacity is larger than q.capacity.
 		s.Resize(newCapacity)
 	}
 	s.size++
 	s.top++
-	s.data[s.top] = i
+	s.data[s.top] = elem
 	return nil
 }
 
@@ -68,7 +68,7 @@ func (s *Stack[T]) Size() int {
 }
 
 // Capacity returns the current capacity
-// of the slice that backs the queue.
+// of the slice that backs the stack.
 func (s *Stack[T]) Capacity() int {
 	return s.capacity
 }
@@ -94,21 +94,20 @@ func (s *Stack[T]) Resize(newCapacity int) error {
 	return nil
 }
 
-// Pop pops the int off the top of the stack. It returns the popped T
+// Pop pops the top element off the stack. It returns the popped element
 // or an error of the stack is empty.
 func (s *Stack[T]) Pop() (T, error) {
 	if s.size-1 < 0 {
 		var zero T
 		return zero, StackEmpty
 	}
-	i := s.data[s.top]
+	elem := s.data[s.top]
 	s.size--
 	s.top--
-	return i, nil
+	return elem, nil
 }
 
-// Peek returns the int off the top of the stack
-// but does not remove it.
+// Peek returns stack's top element but does not remove it.
 // If the stack is empty, an error is returned.
 func (s *Stack[T]) Peek() (T, error) {
 	if s.size-1 < 0 {
