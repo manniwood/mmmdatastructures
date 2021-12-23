@@ -40,12 +40,11 @@ func NewWithCapacity[T constraints.Ordered](requested int) (h *MaxHeap[T]) {
 			break
 		}
 	}
-	// TODO: use &{} syntax instead
-	h = new(MaxHeap[T])
-	h.data = make([]T, power, power)
-	h.capacity = power
-	h.size = 0
-	return h
+	return &MaxHeap[T]{
+		data: make([]T, power, power),
+		capacity: power,
+		size: 0,
+	}
 }
 
 // Insert inserts an item onto the max heap. Returns an error if the size
