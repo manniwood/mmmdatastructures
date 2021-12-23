@@ -59,14 +59,13 @@ func New[T constraints.Ordered]() (q *Queue[T]) {
 
 // NewWithCapacity returns a new empty queue for ints with the requested capacity.
 func NewWithCapacity[T constraints.Ordered](capacity int) (q *Queue[T]) {
-	// TODO: use &{} syntax instead
-	q = new(Queue[T])
-	q.data = make([]T, capacity, capacity)
-	q.head = -1
-	q.tail = -1
-	q.capacity = capacity
-	q.length = 0
-	return q
+	return &Queue[T]{
+		data: make([]T, capacity, capacity),
+		head: -1,
+		tail: -1,
+		capacity: capacity,
+		length: 0,
+	}
 }
 
 // Enqueue enqueues an int. Returns an error if the size

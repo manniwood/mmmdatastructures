@@ -29,13 +29,12 @@ func New[T constraints.Ordered]() (s *Stack[T]) {
 
 // NewWithCapacity returns a new empty stack for ints with the requested capacity.
 func NewWithCapacity[T constraints.Ordered](capacity int) (s *Stack[T]) {
-	// TODO: use &{} syntax
-	s = new(Stack[T])
-	s.data = make([]T, capacity, capacity)
-	s.top = -1
-	s.capacity = capacity
-	s.size = 0
-	return s
+	return &Stack[T]{
+		data: make([]T, capacity, capacity),
+		top: -1,
+		capacity: capacity,
+		size: 0,
+	}
 }
 
 // Push pushes an int onto the stack. Returns an error if the size
