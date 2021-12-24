@@ -6,14 +6,14 @@ import (
 )
 
 func TestCreateInt(t *testing.T) {
-	s := New[int]()
+	s, _ := New[int]()
 	if s.top != -1 {
 		t.Error("Expected top to be -1, got ", s.top)
 	}
 }
 
 func TestPushInt(t *testing.T) {
-	s := New[int]()
+	s, _ := New[int]()
 	s.Push(5)
 	if s.top != 0 {
 		t.Error("Expected top to be 0, got ", s.top)
@@ -36,7 +36,7 @@ func TestPushInt(t *testing.T) {
 }
 
 func TestFillInt(t *testing.T) {
-	s := New[int]()
+	s, _ := New[int]()
 	for i := 1; i <= 32; i++ {
 		s.Push(i)
 	}
@@ -47,7 +47,7 @@ func TestFillInt(t *testing.T) {
 }
 
 func TestDrainInt(t *testing.T) {
-	s := New[int]()
+	s, _ := New[int]()
 	for i := 1; i <= 32; i++ {
 		s.Push(i)
 	}
@@ -73,14 +73,14 @@ func TestDrainInt(t *testing.T) {
 }
 
 func TestCreateString(t *testing.T) {
-	s := New[string]()
+	s, _ := New[string]()
 	if s.top != -1 {
 		t.Error("Expected top to be -1, got ", s.top)
 	}
 }
 
 func TestPushString(t *testing.T) {
-	s := New[string]()
+	s, _ := New[string]()
 	s.Push("5")
 	if s.top != 0 {
 		t.Error("Expected top to be 0, got ", s.top)
@@ -103,7 +103,7 @@ func TestPushString(t *testing.T) {
 }
 
 func TestFillString(t *testing.T) {
-	s := New[string]()
+	s, _ := New[string]()
 	for i := 1; i <= 32; i++ {
 		s.Push(fmt.Sprint(i))
 	}
@@ -114,7 +114,7 @@ func TestFillString(t *testing.T) {
 }
 
 func TestDrainString(t *testing.T) {
-	s := New[string]()
+	s, _ := New[string]()
 	for i := 1; i <= 32; i++ {
 		s.Push(fmt.Sprint(i))
 	}
