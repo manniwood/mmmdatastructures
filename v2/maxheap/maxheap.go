@@ -109,9 +109,15 @@ func (h *MaxHeap[T]) Size() int {
 	return h.size
 }
 
-// Capacity returns the current capacity
-// of the slice that backs the queue.
-func (h *MaxHeap[T]) Capacity() int {
+// Len is a synonym for Size, so that we can satisfy
+// any interface that might require Len() and Cap(),
+// mimicking the len() and cap() built-ins.
+func (h *MaxHeap[T]) Len() int {
+	return h.size
+}
+
+// Cap returns the current capacity of the slice that backs the queue.
+func (h *MaxHeap[T]) Cap() int {
 	return h.capacity
 }
 

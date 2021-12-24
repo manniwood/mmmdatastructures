@@ -51,7 +51,7 @@ func TestDrainInt(t *testing.T) {
 			t.Error("Expected i to be ", j, ", got ", i)
 		}
 	}
-	if q.Length() != 0 {
+	if q.Len() != 0 {
 		t.Error("Expected queue length to be 0")
 	}
 	if !q.Empty() {
@@ -73,7 +73,7 @@ func TestDrainInt(t *testing.T) {
 func TestEnqueueSliceInt(t *testing.T) {
 	q, _ := New[int]()
 	q.EnqueueSlice([]int{1, 2, 3})
-	if q.Length() != 3 {
+	if q.Len() != 3 {
 		t.Error("Expected queue length to be 3")
 	}
 	for j := 1; j <= 3; j++ {
@@ -132,7 +132,7 @@ func TestDrainString(t *testing.T) {
 			t.Error("Expected i to be ", j, ", got ", i)
 		}
 	}
-	if q.Length() != 0 {
+	if q.Len() != 0 {
 		t.Error("Expected queue length to be 0")
 	}
 	if !q.Empty() {
@@ -154,7 +154,7 @@ func TestDrainString(t *testing.T) {
 func TestEnqueueSliceString(t *testing.T) {
 	q, _ := New[string]()
 	q.EnqueueSlice([]string{"1", "2", "3"})
-	if q.Length() != 3 {
+	if q.Len() != 3 {
 		t.Error("Expected queue length to be 3")
 	}
 	for j := 1; j <= 3; j++ {

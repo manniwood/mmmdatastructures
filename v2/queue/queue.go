@@ -127,23 +127,22 @@ func (q *Queue[T]) EnqueueSlice(elements []T) error {
 	return nil
 }
 
-// Length returns the current length
-// of the queue. This is the same as the number of
-// slots used in the slice that
-// backs the queue.
-func (q *Queue[T]) Length() int {
-	return q.length
-}
-
 // Empty returns true if the queue is empty,
 // false otherwise.
 func (q *Queue[T]) Empty() bool {
 	return q.length == 0
 }
 
-// Capacity returns the current capacity
-// of the slice that backs the queue.
-func (q *Queue[T]) Capacity() int {
+// Len returns the current length of the queue. This is the same as the number of
+// slots used in the slice that backs the queue. It is purposefully named Len()
+// to mimic the len() built-in.
+func (q *Queue[T]) Len() int {
+	return q.length
+}
+
+// Cap returns the current capacity of the slice that backs the queue.
+// It is purposefully called Cap() to mimic the name of the cap() built-in.
+func (q *Queue[T]) Cap() int {
 	return q.capacity
 }
 
