@@ -3,14 +3,14 @@ package maxheap
 import "testing"
 
 func TestCreateInt(t *testing.T) {
-	h := New[int]()
+	h, _ := New[int]()
 	if h.size != 0 {
 		t.Error("Expected size to be -1, got ", h.size)
 	}
 }
 
 func TestInsertInt(t *testing.T) {
-	h := New[int]()
+	h, _ := New[int]()
 	var tests = []struct {
 		insert int
 		max    int
@@ -48,7 +48,7 @@ func checkBackingSliceInt(t *testing.T, a []int, b []int, sz int) {
 }
 
 func TestDeleteInt(t *testing.T) {
-	h := New[int]()
+	h, _ := New[int]()
 	inits := []int{5, 10, 20, 7}
 	for _, i := range inits {
 		h.Insert(i)
@@ -107,14 +107,14 @@ func TestSortInt(t *testing.T) {
 }
 
 func TestCreateString(t *testing.T) {
-	h := New[string]()
+	h, _ := New[string]()
 	if h.size != 0 {
 		t.Error("Expected size to be -1, got ", h.size)
 	}
 }
 
 func TestInsertString(t *testing.T) {
-	h := New[string]()
+	h, _ := New[string]()
 	var tests = []struct {
 		insert string
 		max    string
@@ -152,7 +152,7 @@ func checkBackingSliceString(t *testing.T, a []string, b []string, sz int) {
 }
 
 func TestDeleteString(t *testing.T) {
-	h := New[string]()
+	h, _ := New[string]()
 	inits := []string{"05", "10", "20", "07"}
 	for _, i := range inits {
 		h.Insert(i)

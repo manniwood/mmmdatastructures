@@ -7,7 +7,7 @@ import (
 )
 
 func TestCreateInt(t *testing.T) {
-	q := New[int]()
+	q, _ := New[int]()
 	if q.head != -1 {
 		t.Error("Expected Head to be -1, got ", q.head)
 	}
@@ -17,7 +17,7 @@ func TestCreateInt(t *testing.T) {
 }
 
 func TestEnqueueInt(t *testing.T) {
-	q := New[int]()
+	q, _ := New[int]()
 	q.Enqueue(5)
 	if q.tail != -1 {
 		t.Error("Expected Tail to be -1, got ", q.tail)
@@ -28,7 +28,7 @@ func TestEnqueueInt(t *testing.T) {
 }
 
 func TestFillInt(t *testing.T) {
-	q := New[int]()
+	q, _ := New[int]()
 	for i := 1; i <= 32; i++ {
 		q.Enqueue(i)
 	}
@@ -39,7 +39,7 @@ func TestFillInt(t *testing.T) {
 }
 
 func TestDrainInt(t *testing.T) {
-	q := New[int]()
+	q, _ := New[int]()
 	for i := 1; i <= 32; i++ {
 		q.Enqueue(i)
 	}
@@ -71,7 +71,7 @@ func TestDrainInt(t *testing.T) {
 }
 
 func TestEnqueueSliceInt(t *testing.T) {
-	q := New[int]()
+	q, _ := New[int]()
 	q.EnqueueSlice([]int{1, 2, 3})
 	if q.Length() != 3 {
 		t.Error("Expected queue length to be 3")
@@ -88,7 +88,7 @@ func TestEnqueueSliceInt(t *testing.T) {
 }
 
 func TestCreateString(t *testing.T) {
-	q := New[string]()
+	q, _ := New[string]()
 	if q.head != -1 {
 		t.Error("Expected Head to be -1, got ", q.head)
 	}
@@ -98,7 +98,7 @@ func TestCreateString(t *testing.T) {
 }
 
 func TestEnqueueString(t *testing.T) {
-	q := New[string]()
+	q, _ := New[string]()
 	q.Enqueue("5")
 	if q.tail != -1 {
 		t.Error("Expected Tail to be -1, got ", q.tail)
@@ -109,7 +109,7 @@ func TestEnqueueString(t *testing.T) {
 }
 
 func TestFillString(t *testing.T) {
-	q := New[string]()
+	q, _ := New[string]()
 	for i := 1; i <= 32; i++ {
 		q.Enqueue(fmt.Sprint(i))
 	}
@@ -120,7 +120,7 @@ func TestFillString(t *testing.T) {
 }
 
 func TestDrainString(t *testing.T) {
-	q := New[string]()
+	q, _ := New[string]()
 	for i := 1; i <= 32; i++ {
 		q.Enqueue(fmt.Sprint(i))
 	}
@@ -152,7 +152,7 @@ func TestDrainString(t *testing.T) {
 }
 
 func TestEnqueueSliceString(t *testing.T) {
-	q := New[string]()
+	q, _ := New[string]()
 	q.EnqueueSlice([]string{"1", "2", "3"})
 	if q.Length() != 3 {
 		t.Error("Expected queue length to be 3")

@@ -13,6 +13,22 @@ import (
 // when constructed using New() instead of NewWithCapacity().
 const DefaultCapacity = 32
 
+type NegativeHeapCapacityError struct {
+	msg string
+}
+
+func (e *NegativeHeapCapacityError) Error() string {
+	return e.msg
+}
+
+type ResizeHeapCapacityError struct {
+	msg string
+}
+
+func (e *ResizeHeapCapacityError) Error() string {
+	return e.msg
+}
+
 var HeapCapacityExceeded = errors.New("Heap Capacity Exceeded")
 var HeapEmpty = errors.New("Heap Empty")
 
@@ -24,13 +40,18 @@ type MaxHeap[T constraints.Ordered] struct {
 }
 
 // New returns a new empty max heap of the default capacity.
-func New[T constraints.Ordered]() (h *MaxHeap[T]) {
+func New[T constraints.Ordered]() (*MaxHeap[T], error) {
 	return NewWithCapacity[T](DefaultCapacity)
 }
 
 // NewWithCapacity returns a new empty max heap with the requested capacity
 // rounded up to the next power of two.
-func NewWithCapacity[T constraints.Ordered](requested int) (h *MaxHeap[T]) {
+func NewWithCapacity[T constraints.Ordered](requested int) (*MaxHeap[T], error) {
+	if requested < 1 {
+		return nil, &NegativeHeapCapacityError{
+			msg: fmt.Sprintf("requested capacity %d is zero or negative", requested),
+		}
+	}
 	power := 1
 	for power < requested {
 		power *= 2
@@ -44,7 +65,7 @@ func NewWithCapacity[T constraints.Ordered](requested int) (h *MaxHeap[T]) {
 		data: make([]T, power, power),
 		capacity: power,
 		size: 0,
-	}
+	}, nil
 }
 
 // Insert inserts an item onto the max heap. It returns an error if the size
@@ -101,7 +122,9 @@ func (h *MaxHeap[T]) Capacity() int {
 // capacity.
 func (h *MaxHeap[T]) resize(newCapacity int) error {
 	if newCapacity <= h.capacity {
-		return fmt.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, h.capacity)
+		return &ResizeHeapCapacityError{
+			msg: fmt.Sprintf("New capacity %d is not larger than current capacity %d", newCapacity, h.capacity),
+		}
 	}
 	newData := make([]T, newCapacity, newCapacity)
 	for i := 0; i < len(h.data); i++ {

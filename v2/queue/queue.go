@@ -40,6 +40,22 @@ import (
 // when constructed using New() instead of NewWithCapacity().
 const DefaultCapacity = 32
 
+type NegativeQueueCapacityError struct {
+	msg string
+}
+
+func (e *NegativeQueueCapacityError) Error() string {
+	return e.msg
+}
+
+type ResizeQueueCapacityError struct {
+	msg string
+}
+
+func (e *ResizeQueueCapacityError) Error() string {
+	return e.msg
+}
+
 var QueueCapacityExceeded = errors.New("Queue Capacity Exceeded")
 var QueueEmpty = errors.New("Queue Empty")
 
@@ -53,19 +69,24 @@ type Queue[T constraints.Ordered] struct {
 }
 
 // New returns a new empty queue of the default capacity.
-func New[T constraints.Ordered]() (q *Queue[T]) {
+func New[T constraints.Ordered]() (*Queue[T], error) {
 	return NewWithCapacity[T](DefaultCapacity)
 }
 
 // NewWithCapacity returns a new empty queue with the requested capacity.
-func NewWithCapacity[T constraints.Ordered](capacity int) (q *Queue[T]) {
+func NewWithCapacity[T constraints.Ordered](capacity int) (*Queue[T], error) {
+	if capacity < 1 {
+		return nil, &NegativeQueueCapacityError{
+			msg: fmt.Sprintf("capacity %d is zero or negative", capacity),
+		}
+	}
 	return &Queue[T]{
 		data: make([]T, capacity, capacity),
 		head: -1,
 		tail: -1,
 		capacity: capacity,
 		length: 0,
-	}
+	}, nil
 }
 
 // Enqueue enqueues an element. Returns an error if the size
@@ -136,7 +157,9 @@ func (q *Queue[T]) Capacity() int {
 // whatever new size you want.
 func (q *Queue[T]) Resize(newCapacity int) error {
 	if newCapacity <= q.capacity {
-		return fmt.Errorf("New capacity %d is not larger than current capacity %d", newCapacity, q.capacity)
+		return &ResizeQueueCapacityError{
+			msg: fmt.Sprintf("New capacity %d is not larger than current capacity %d", newCapacity, q.capacity),
+		}
 	}
 	newData := make([]T, newCapacity, newCapacity)
 	var err error
