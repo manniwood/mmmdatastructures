@@ -22,5 +22,9 @@ me too much.
 For version 2, I have re-implemented everything using
 Go 1.8's generics (parametric polymorphism). Setting up
 version 2 was also a nice way to experiment with making
-version 2 of a go module.
+version 2 of a go module. I have some evolutionary dead-ends
+in here, so prefer version 3.
+
+Version 3 is just a slightly more cleaned up version of version 2,
+especially around standardizing names of methods.
 
