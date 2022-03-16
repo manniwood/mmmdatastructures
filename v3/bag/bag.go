@@ -15,7 +15,7 @@ func (b Bag[T]) Has(elem T) bool {
 	return ok
 }
 
-// Put puts an element in the bag. 
+// Put puts an element in the bag.
 func (b Bag[T]) Put(elem T) {
 	b[elem] = b[elem] + 1
 }

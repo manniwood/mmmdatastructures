@@ -32,7 +32,7 @@ var StackEmpty = errors.New("Stack Empty")
 
 // Stack holds the data and state of the stack.
 type Stack[T constraints.Ordered] struct {
-	data     []T
+	data []T
 	// top is the topmost index of data[] that holds an element.
 	top      int
 	capacity int
@@ -54,7 +54,7 @@ func NewWithCapacity[T constraints.Ordered](capacity int) (*Stack[T], error) {
 		data: make([]T, capacity, capacity),
 		// When the stack is empty, top == -1, whereas when the stack contains
 		// one element, top == 0, the "0th" element of data[].
-		top: -1,
+		top:      -1,
 		capacity: capacity,
 	}, nil
 }

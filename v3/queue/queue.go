@@ -81,11 +81,11 @@ func NewWithCapacity[T constraints.Ordered](capacity int) (*Queue[T], error) {
 		}
 	}
 	return &Queue[T]{
-		data: make([]T, capacity, capacity),
-		head: -1,
-		tail: -1,
+		data:     make([]T, capacity, capacity),
+		head:     -1,
+		tail:     -1,
 		capacity: capacity,
-		length: 0,
+		length:   0,
 	}, nil
 }
 

@@ -62,9 +62,9 @@ func NewWithCapacity[T constraints.Ordered](requested int) (*MaxHeap[T], error) 
 		}
 	}
 	return &MaxHeap[T]{
-		data: make([]T, power, power),
+		data:     make([]T, power, power),
 		capacity: power,
-		size: 0,
+		size:     0,
 	}, nil
 }
 
